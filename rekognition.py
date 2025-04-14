@@ -1,9 +1,7 @@
 import boto3
 
 def detect_labels(bucket, key):
-    session = boto3.Session(profile_name="default")
-    client = session.client("rekognition")
-    
+    client = boto3.Session("rekognition")
     try:
         response = client.detect_labels(
             Image={
@@ -19,14 +17,11 @@ def detect_labels(bucket, key):
         print(f"Error detecting labels: {e}")
         return None
 
-def main():
-    bucket = "myfirsts3bucketproject"
-    key = "images.jpg"
+def lambda_handler(event,context):
+    bucket = event["bucket"]
+    key = event["key"]
     response = detect_labels(bucket, key)
     if response:
         print("Detected Labels:")
         for label in response.get('Labels', []):
             print(f"Label: {label['Name']}, Confidence: {label['Confidence']:.2f}%")
-
-if __name__ == "__main__":
-    main()
