@@ -1,7 +1,7 @@
 import boto3
 
 def detect_labels(bucket, key):
-    client = boto3.Session("rekognition")
+    client = boto3.client("rekognition")
     try:
         response = client.detect_labels(
             Image={
